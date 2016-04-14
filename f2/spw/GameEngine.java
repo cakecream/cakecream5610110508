@@ -11,18 +11,49 @@ import java.util.Iterator;
 import javax.swing.Timer;
 
 
-public class GameEngine implements KeyListener{
+public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
-	
-	public GameEngine(GamePanel gp) {
+		
+	private SpaceShip v;	
+	private Timer timer;
+			
+	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
-				
+		this.v = v;		
+		
+		gp.sprites.add(v);
+		
+		timer = new Timer(50, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				process();
+			}
+		});
+		timer.setRepeats(true);
+		
+	}
+	
+	public void start(){
+		timer.start();
 	}
 	
 	
-	@Override
-	public void keyPressed(KeyEvent e) {	
+	
+	private void process(){
+			
+		gp.updateGameUI(this);
+		Rectangle2D.Double vr = v.getRectangle();
 		
+	}
+	
+	public void die(){
+		timer.stop();
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+			
 	}
 
 	@Override
@@ -33,5 +64,5 @@ public class GameEngine implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		//do nothing		
-	} 
+	}
 }
