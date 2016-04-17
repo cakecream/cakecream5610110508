@@ -17,7 +17,19 @@ public class SpaceShip extends Sprite{
 		g.setColor(Color.RED);
 		g.fillRect(x, y, width, height);
 	}
-		
-
+	public void moveLR(int direction){
+		x += (step * direction);
+		if(x < 0)
+			x = 0;
+		if(x > 690 - width)
+			x = 690 - width;
+	}		
+	public void moveUD(int direction){
+		y += (step * direction);
+		if(y < 0)
+			y = 0;
+		if(y >  600- height)
+			y = 600 - height;
+	}
 	
 }

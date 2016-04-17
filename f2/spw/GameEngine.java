@@ -16,7 +16,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 	private SpaceShip v;	
 	private Timer timer;
-			
+
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
 		this.v = v;		
@@ -41,7 +41,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	
 	private void process(){
-			
+
 		gp.updateGameUI(this);
 		Rectangle2D.Double vr = v.getRectangle();
 		
@@ -50,10 +50,32 @@ public class GameEngine implements KeyListener, GameReporter{
 	public void die(){
 		timer.stop();
 	}
-	
+
+	void controlVehicle(KeyEvent e) {
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_LEFT:
+			v.moveLR(-1);
+			break;
+		case KeyEvent.VK_RIGHT:
+			v.moveLR(1);
+			break;
+		case KeyEvent.VK_UP:
+			v.moveUD(-1);
+			break;
+		case KeyEvent.VK_DOWN:
+			v.moveUD(1);
+			break;	
+		case KeyEvent.VK_S:
+			die();
+			break;			
+		case KeyEvent.VK_P:
+			start();
+			break;
+		}
+	}
 	@Override
 	public void keyPressed(KeyEvent e) {
-			
+		controlVehicle(e);	
 	}
 
 	@Override
