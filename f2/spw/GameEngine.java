@@ -53,6 +53,7 @@ public class GameEngine implements KeyListener, GameReporter{
 
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
+
 		case KeyEvent.VK_LEFT:
 			v.moveLR(-1);
 			break;
@@ -71,6 +72,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_P:
 			start();
 			break;
+			
 		}
 	}
 	@Override
