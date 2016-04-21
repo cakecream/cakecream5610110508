@@ -19,12 +19,13 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		bi = new BufferedImage(700, 650, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
-		big.setBackground(Color.PINK);
+		big.setBackground(Color.BLACK);
 	}
 
 	public void updateGameUI(GameReporter reporter){
 		big.clearRect(0, 0, 700, 650);
 		
+		big.setColor(Color.WHITE);
 		for(Sprite s : sprites){
 			s.draw(big);
 		}

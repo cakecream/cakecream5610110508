@@ -13,15 +13,18 @@ import javax.swing.Timer;
 
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
-		
+	
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<EnemySecond> enemiessec = new ArrayList<EnemySecond>();
 	private SpaceShip v;	
 	private Timer timer;
-
+	private double difficulty = 0.1;
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
 		this.v = v;		
 		
 		gp.sprites.add(v);
+		
 		
 		timer = new Timer(50, new ActionListener() {
 			
@@ -34,17 +37,64 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 	}
 	
+
 	public void start(){
 		timer.start();
 	}
-	
-	
+	private void generateEnemy(){
+		Enemy e = new Enemy((int)(Math.random()*680), 30);
+		gp.sprites.add(e);
+		enemies.add(e);
+	}
+	private void generateEnemySecond(){
+		EnemySecond es = new EnemySecond((int)(Math.random()*680), 30);
+		gp.sprites.add(es);
+		enemiessec.add(es);
+	}	
 	
 	private void process(){
+		if(Math.random() < difficulty){
+			generateEnemy();
+		}
+		if(Math.random() < difficulty){
+			generateEnemySecond();
+		}	
+
+
+		Iterator<Enemy> e_iter = enemies.iterator();
+		while(e_iter.hasNext()){
+			Enemy e = e_iter.next();
+			e.proceed();
+			
+			if(!e.isAlive()){
+				e_iter.remove();
+				gp.sprites.remove(e);
+				
+			}
+		}
+		Iterator<EnemySecond> es_iter = enemiessec.iterator();
+		while(es_iter.hasNext()){
+			EnemySecond es = es_iter.next();
+			es.proceed();
+			
+			if(!es.isAlive()){
+				es_iter.remove();
+				gp.sprites.remove(es);
+				
+			}
+		}
+
 
 		gp.updateGameUI(this);
 		Rectangle2D.Double vr = v.getRectangle();
-		
+		Rectangle2D.Double er;
+		for(Enemy e : enemies){
+			er = e.getRectangle();
+			if(er.intersects(vr)){
+				die();
+				return;
+			}
+		}		
 	}
 	
 	public void die(){
@@ -72,7 +122,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_P:
 			start();
 			break;
-			
+		case KeyEvent.VK_D:
+			difficulty += 0.3;
+			break;			
 		}
 	}
 	@Override
