@@ -24,8 +24,8 @@ public class GamePanel extends JPanel {
 
 	public void updateGameUI(GameReporter reporter){
 		big.clearRect(0, 0, 700, 650);
-		
-		big.setColor(Color.WHITE);
+		big.setColor(Color.WHITE);		
+		big.drawString(String.format("%05d", reporter.getScore()), 630, 40);		
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
