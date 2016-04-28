@@ -21,6 +21,8 @@ public class GameEngine implements KeyListener, GameReporter{
 
 	private long score = 0;	
 	private double difficulty = 0.1;
+	private int heart = 3;
+
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
 		this.v = v;		
@@ -93,7 +95,13 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
-				die();
+				
+				if(heart>0){
+					heart--;
+					e.notAlive();
+				}
+				else
+					die();
 				return;
 			}
 		}
@@ -102,7 +110,13 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(EnemySecond es : enemiessec){
 			ers = es.getRectangle();
 			if(ers.intersects(vr)){
-				die();
+		
+				if(heart>0){
+					heart--;
+					es.notAlive();
+				}
+				else
+					die();				
 				return;
 			}
 		}		
@@ -143,6 +157,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		return score;
 	}
 
+	public int getHeart(){
+		return heart;
+	}
 	@Override
 	public void keyPressed(KeyEvent e) {
 		controlVehicle(e);	
