@@ -16,6 +16,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private ArrayList<EnemySecond> enemiessec = new ArrayList<EnemySecond>();
+	private ArrayList<Bullet> bullet = new ArrayList<Bullet>();
 	private SpaceShip v;	
 	private Timer timer;
 
@@ -55,6 +56,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(es);
 		enemiessec.add(es);
 	}	
+
+	private void generateBullet(){
+		Bullet b = new Bullet(v.x+27,v.y-30);
+		gp.sprites.add(b);
+		bullet.add(b);
+	}	
 	
 	private void process(){
 		if(Math.random() < difficulty){
@@ -73,7 +80,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += 100;
+				
 			}
 		}
 		Iterator<EnemySecond> es_iter = enemiessec.iterator();
@@ -84,18 +91,37 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!es.isAlive()){
 				es_iter.remove();
 				gp.sprites.remove(es);
-				score += 20;
+				
 			}
 		}
-
+		Iterator<Bullet> b_iter = bullet.iterator();
+		while(b_iter.hasNext()){
+			Bullet b = b_iter.next();
+			b.proceed();
+			
+			if(!b.isAlive()){
+				b_iter.remove();
+				gp.sprites.remove(b);
+				
+			}
+		}
 
 		gp.updateGameUI(this);
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
+		Rectangle2D.Double br;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
+			for(Bullet b : bullet){
+				br = b.getRectangle();
+				if(br.intersects(er)){
+					score += 100;
+					e.notAlive();
+					b.notAlive();
+					return;
+				}
+			}
 			if(er.intersects(vr)){
-				
 				if(heart>0){
 					heart--;
 					e.notAlive();
@@ -104,13 +130,23 @@ public class GameEngine implements KeyListener, GameReporter{
 					die();
 				return;
 			}
+			
 		}
 		Rectangle2D.Double ers;
 
 		for(EnemySecond es : enemiessec){
 			ers = es.getRectangle();
+			for(Bullet b : bullet){
+				br = b.getRectangle();
+				if(br.intersects(ers)){
+					score += 20;
+					es.notAlive();
+					b.notAlive();
+					return;
+				}
+			}
 			if(ers.intersects(vr)){
-		
+
 				if(heart>0){
 					heart--;
 					es.notAlive();
@@ -149,7 +185,10 @@ public class GameEngine implements KeyListener, GameReporter{
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.3;
-			break;			
+			break;	
+		case KeyEvent.VK_SPACE:
+			generateBullet();
+			break;				
 		}
 	}
 

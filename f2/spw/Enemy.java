@@ -18,7 +18,7 @@ public class Enemy extends Sprite{
 	BufferedImage image;
 
 	public Enemy(int x, int y) {
-		super(x, y, 40, 70);
+		super(x, y, 70, 70);
 		try{
 			image = ImageIO.read(new File("f2/image/Enemy.png"));
 		}

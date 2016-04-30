@@ -9,18 +9,18 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class EnemySecond extends Sprite{
-	public static final int Y_TO_FADE = 400;
-	public static final int Y_TO_DIE = 600;
+public class Bullet extends Sprite{
+	public static final int Y_TO_FADE = 650;
+	public static final int Y_TO_DIE = 20;
 	
 	private int step = 12;
 	private boolean alive = true;
 	BufferedImage image;
 
-		public EnemySecond(int x, int y) {
-		super(x, y, 45, 65);
+	public Bullet(int x, int y) {
+		super(x, y, 16, 60);
 		try{
-			image = ImageIO.read(new File("f2/image/EnemySecond.png"));
+			image = ImageIO.read(new File("f2/image/Bullet.png"));
 		}
 		catch(IOException e){
 
@@ -35,14 +35,14 @@ public class EnemySecond extends Sprite{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
-		//g.setColor(Color.BLUE);
+		//g.setColor(Color.GREEN);
 		//g.fillRect(x, y, width, height);
 		g.drawImage(image, x, y, width, height, null);
 	}
 
 	public void proceed(){
-		y += step;
-		if(y > Y_TO_DIE){
+		y -= step;
+		if(y < Y_TO_DIE){
 			alive = false;
 		}
 	}
@@ -54,4 +54,5 @@ public class EnemySecond extends Sprite{
 	public void notAlive(){
 		alive = false;
 	}
+
 }
